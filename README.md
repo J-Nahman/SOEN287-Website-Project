@@ -1,7 +1,7 @@
 SOEN 287 Project
 Group Members
 Joaquin Nahman - 40270510
-NB
+Nermine Bhouri - 40319147
 Tony
 
 
@@ -14,6 +14,7 @@ Login page for both users and administrators
 Overview:
 Browser for both users and administrators
 Each have access to different tools
+
 
 
 
