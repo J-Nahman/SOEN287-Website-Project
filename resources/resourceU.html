@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Reservation Panel</title>
+    <link rel="stylesheet" href="resourcesU.css"/>
+</head>
+<body>
+    <nav>
+        <div class="row" style="width: 75%;">
+            <div class="logo">
+                <a href="/index.html">Concordia Reserves</a>
+            </div>
+            <div class="account">
+                <a href="/overviewU.html">Overview</a>
+            </div>
+            <div class="account">
+                <a href="/overviewU.html">My Bookings</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <h1 class="page-title">Book Your Reservation</h1>
+        
+        <div class="calendar-container">
+            <div class="calendar">
+                <div class="calendar-header">
+                    <h2>October 2023</h2>
+                    <div class="calendar-nav">
+                        <button id="prev-month">&lt;</button>
+                        <button id="next-month">&gt;</button>
+                    </div>
+                </div>
+                <div class="calendar-grid">
+                    <div class="calendar-day">Sun</div>
+                    <div class="calendar-day">Mon</div>
+                    <div class="calendar-day">Tue</div>
+                    <div class="calendar-day">Wed</div>
+                    <div class="calendar-day">Thu</div>
+                    <div class="calendar-day">Fri</div>
+                    <div class="calendar-day">Sat</div>
+                    <!-- Calendar dates by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="time-slots">
+                <h2>Available Time Slots</h2>
+                <div class="slots-container">
+                    <!-- Time slots populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="booking-summary">
+            <h2>Booking Summary</h2>
+            <div class="summary-details">
+                <div class="summary-item">
+                    <span>Date:</span>
+                    <span id="summary-date">Not selected</span>
+                </div>
+                <div class="summary-item">
+                    <span>Time:</span>
+                    <span id="summary-time">Not selected</span>
+                </div>
+                <div class="summary-item">
+                    <span>Duration:</span>
+                    <span>1 hour</span>
+                </div>
+            </div>
+            <button class="book-button" id="book-button">Confirm Booking</button>
+        </div>
+    </main>
+
+    <footer>
+        <a href="#">Go to top</a>
+    </footer>
+    <script src="resourcesU.js"></script>
+</body>
+</html>
