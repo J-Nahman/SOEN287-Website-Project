@@ -19,7 +19,11 @@ Login page for both users and administrators
 Overview:
 Browser for both users and administrators
 
+Resource:
+Calendar booking system that allows users to book a time slot and admins to modify and block time slots
+
 Each have access to different tools
+
 
 
 
