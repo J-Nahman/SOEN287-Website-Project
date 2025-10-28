@@ -8,6 +8,26 @@
     margin: auto;
     padding:0 12px
 }
+.adminRow{
+    display: flex;
+    max-width: 1000px;
+    justify-content: space-between;
+    flex-direction: row;
+    margin: auto;
+    background-color: #ffffff;
+    padding: 12px;
+}
+.column{
+    display: flex;
+    flex-direction: column; 
+    gap: 1rem;
+    justify-content: space-between;
+    width:30%;
+    align-items: center;
+     margin-bottom: 48px;
+     background-color: #f0f0f0;
+     padding: 18px;
+}
 
 nav{
     background-color: #912338;
