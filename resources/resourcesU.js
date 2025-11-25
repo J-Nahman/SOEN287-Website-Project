@@ -1,29 +1,5 @@
-// // Test connection on page load
-// async function testConnection() {
-//     try {
-//         console.log('🔍 Testing backend connection...');
-//         const response = await fetch(`${API_BASE_URL}/health`);
-//         if (response.ok) {
-//             const data = await response.json();
-//             console.log('✅ Backend connection successful:', data);
-//             return true;
-//         } else {
-//             console.error('❌ Backend connection failed:', response.status);
-//             return false;
-//         }
-//     } catch (error) {
-//         console.error('❌ Backend connection error:', error);
-//         alert('Cannot connect to booking server. Please ensure the backend is running on port 3001.');
-//         return false;
-//     }
-// }
-
-    const API_BASE_URL = 'http://localhost:3001/api';
-
-
 document.addEventListener('DOMContentLoaded', function () {
-        // testConnection();
-
+  const API_BASE_URL = 'http://localhost:3001/api';
     // Calendar functionality
     const calendarGrid = document.querySelector('.calendar-grid');
     const prevMonthBtn = document.getElementById('prev-month');

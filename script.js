@@ -70,8 +70,12 @@ document.getElementById('loginForm').onsubmit=function(e){
             return false;
         }
 
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                window.location.href = 'dashboard.html';
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        if (user.role==='admin'){        
+            window.location.href = 'overviewA.html';
+        }else{
+            window.location.href = 'overviewU.html';
+        }
         
     } else {
         document.getElementById('errorMessage').innerHTML = 'Invalid email or password!';
@@ -79,4 +83,5 @@ document.getElementById('loginForm').onsubmit=function(e){
     }
     
     return false;
+
 };

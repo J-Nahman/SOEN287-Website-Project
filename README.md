@@ -19,6 +19,9 @@ Login page for both users and administrators
 Overview:
 Browser for both users and administrators
 
+Resource:
+Calendar booking system that allows users to book a time slot and admins to modify and block time slots
+
 Each have access to different tools
 
 
@@ -40,6 +43,7 @@ HOW TO SET UP DATABASE FOR WINDOWS:
 >TO CLOSE SERVER DO CTRL + C IN TERMINAL TO CLOSE API SESSION
 
 >IN TERMINAL RUN: npm run docker-stop TO CLOSE PORT WHERE DB IS BEING RUN
+
 
 
 
