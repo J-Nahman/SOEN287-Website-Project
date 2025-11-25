@@ -24,12 +24,19 @@ Each have access to different tools
 
 HOW TO SET UP DATABASE FOR WINDOWS:
 >ENSURE NODEJS IS DOWNLOADED
+
 >ENSURE DOCKER DESKTOP IS DOWNLOADED (personal accounts are free and allows for creating and running backend db from files)
+
 >IN TERMINAL RUN npm docker-start
+
 >IN TERMINAL RUN npm init-db
+
 >IN TERMINAL RUN npm start
+
 >START LIVE SERVER AND LOG IN AS STUDENT
+
 >BOOKING SHOULD WORK
+
 
 
 
