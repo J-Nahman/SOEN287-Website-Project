@@ -1,28 +1,6 @@
-// // Test connection on page load
-// async function testConnection() {
-//     try {
-//         console.log('🔍 Testing backend connection...');
-//         const response = await fetch(`${API_BASE_URL}/health`);
-//         if (response.ok) {
-//             const data = await response.json();
-//             console.log('✅ Backend connection successful:', data);
-//             return true;
-//         } else {
-//             console.error('❌ Backend connection failed:', response.status);
-//             return false;
-//         }
-//     } catch (error) {
-//         console.error('❌ Backend connection error:', error);
-//         alert('Cannot connect to booking server. Please ensure the backend is running on port 3001.');
-//         return false;
-//     }
-// }
-
-    const API_BASE_URL = 'http://localhost:3001/api';
 
 
 document.addEventListener('DOMContentLoaded', function () {
-        // testConnection();
 
     // Calendar functionality
     const calendarGrid = document.querySelector('.calendar-grid');
@@ -39,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentUserId = 1;
     let currentResourceId = 1;
 
-
+    const API_BASE_URL = 'http://localhost:3001/api';
 
     // Generates calendar for the current month
     function generateCalendar(date) {
@@ -200,14 +178,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (!response.ok) throw new Error(result.error || 'Failed to create booking');
 
-            alert(`✅ Booking confirmed for ${summaryDate.textContent} at ${summaryTime.textContent}`);
+            alert(`Booking confirmed for ${summaryDate.textContent} at ${summaryTime.textContent}`);
 
             const formattedDate = selectedDate.toISOString().split('T')[0];
             generateTimeSlots(formattedDate);
             
         } catch (error) {
             console.error('Booking error:', error);
-            alert(`❌ Booking failed: ${error.message}`);
+            alert(`Booking failed: ${error.message}`);
 
         } finally {
             bookButton.disabled = false;

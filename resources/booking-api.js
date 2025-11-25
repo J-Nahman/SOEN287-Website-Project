@@ -45,10 +45,10 @@ function executeQuery(sql, params = []) {
             }
 
             console.log('🔍 Executing query:', sql, 'with params:', params);
-            
+
             connection.query(sql, params, (error, results) => {
                 connection.release();
-                
+
                 if (error) {
                     console.error('❌ Query execution error:', error);
                     reject(error);
@@ -67,7 +67,7 @@ function executeQuery(sql, params = []) {
 app.get('/api/available-slots', async (req, res) => {
     try {
         const { date, resourceId = 1 } = req.query;
-        
+
         console.log('📥 Available slots request - date:', date);
 
         if (!date) {
@@ -83,15 +83,15 @@ app.get('/api/available-slots', async (req, res) => {
         );
 
         const bookedTimeSlots = bookings.map(booking => booking.time_slot);
-        
+
         console.log('✅ Sending response with', bookedTimeSlots.length, 'booked slots');
-        
+
         return res.json({
             date,
             resourceId,
             bookedTimeSlots
         });
-        
+
     } catch (error) {
         console.error('Error fetching available slots:', error);
         return res.status(500).json({ error: 'Internal server error' });
@@ -102,49 +102,74 @@ app.get('/api/available-slots', async (req, res) => {
 app.post('/api/bookings', async (req, res) => {
     try {
         const { userId, resourceId, date, time_slot } = req.body;
-        
+
         console.log('📥 Booking request received:', { userId, resourceId, date, time_slot });
 
-        // Validation
-        if (!userId || !resourceId || !date || !time_slot) {
-            return res.status(400).json({ 
-                error: 'Missing required fields: userId, resourceId, date, time_slot' 
+        // Validation and special admin user 99999
+        if ((!userId || userId === 'undefined') && userId !== 99999) {
+            return res.status(400).json({
+                success: false,
+                error: 'Missing required fields: userId'
             });
         }
-        
-        // Check if slot is already booked
-        const existingBookings = await executeQuery(
-            'SELECT id FROM bookings WHERE resource_id = ? AND date = ? AND time_slot = ?',
-            [resourceId, date, time_slot]
-        );
 
-         console.log('📊 Existing bookings found:', existingBookings);
-
-        if (existingBookings.length > 0) {
-            return res.status(409).json({ success: false, error: 'This time slot is already booked' });
+        if (!resourceId || !date || !time_slot) {
+            return res.status(400).json({
+                success: false,
+                error: 'Missing required fields: resourceId, date, time_slot'
+            });
         }
-        
-        // Create new booking
-        console.log('💾 Creating new booking in database...');
-        const result = await executeQuery(
-           'INSERT INTO bookings (user_id, resource_id, date, time_slot) VALUES (?, ?, ?, ?)',
-            [userId, resourceId, date, time_slot]
-        );
-        console.log('✅ Booking created successfully, ID:', result.insertId);
-        
+
+        let result;
+
+        // Check if slot is already booked while allowing for admin override
+        if (userId !== 99999) {
+            const existingBookings = await executeQuery(
+                'SELECT id FROM bookings WHERE resource_id = ? AND date = ? AND time_slot = ?',
+                [resourceId, date, time_slot]
+            );
+
+            console.log('📊 Existing bookings found:', existingBookings);
+
+            if (existingBookings.length > 0) {
+                return res.status(409).json({ success: false, error: 'This time slot is already booked' });
+            }
+            // Create new booking
+            console.log('💾 Creating new booking in database...');
+            result = await executeQuery(
+                'INSERT INTO bookings (user_id, resource_id, date, time_slot) VALUES (?, ?, ?, ?)',
+                [userId, resourceId, date, time_slot]
+            );
+            console.log('✅ Booking created successfully, ID:', result.insertId);
+        } else {
+            //remove prev booking before blocking with admin id
+            const deletePrev = await executeQuery(
+                'DELETE FROM bookings WHERE resource_id = ? AND date = ? AND time_slot = ?',
+                [resourceId, date, time_slot]
+            );
+            //blocking with admin id
+            console.log('🗑️ Deleted existing bookings:', deletePrev);
+            result = await executeQuery(
+                'INSERT INTO bookings (user_id, resource_id, date, time_slot) VALUES (?, ?, ?, ?)',
+                [userId, resourceId, date, time_slot]
+            );
+        }
+
+
+        const message = userId === 99999 ? 'Time slot blocked successfully' : 'Booking created successfully';
         res.status(201).json({
             success: true,
-            message: 'Booking created successfully',
+            message: message,
             bookingId: result.insertId,
             userId,
             resourceId,
             date,
             time_slot
         });
-        
+
     } catch (error) {
         console.error('Error creating booking:', error);
-        res.status(500).json({success: false, error: 'Internal server error' + error.message});
+        res.status(500).json({ success: false, error: 'Internal server error' + error.message });
     }
 });
 
@@ -152,7 +177,7 @@ app.post('/api/bookings', async (req, res) => {
 app.get('/api/users/:userId/bookings', async (req, res) => {
     try {
         const { userId } = req.params;
-        
+
         const bookings = await executeQuery(
             `SELECT id, resource_id, date, time_slot, created_at 
              FROM bookings 
@@ -160,9 +185,9 @@ app.get('/api/users/:userId/bookings', async (req, res) => {
              ORDER BY date DESC, time_slot DESC`,
             [userId]
         );
-        
+
         res.json(bookings);
-        
+
     } catch (error) {
         console.error('Error fetching user bookings:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -172,33 +197,84 @@ app.get('/api/users/:userId/bookings', async (req, res) => {
 // Get all bookings (for admin purposes)
 app.get('/api/bookings', async (req, res) => {
     try {
+
         const bookings = await executeQuery(
-            `SELECT * FROM bookings ORDER BY date DESC, time_slot DESC`
+            `SELECT b.* 
+            FROM bookings b
+            ORDER BY b.date DESC, b.time_slot DESC`
         );
-        
+
+        console.log(`✅ Found ${bookings.length} bookings`);
+
         res.json(bookings);
-        
+
     } catch (error) {
         console.error('Error fetching all bookings:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ success: false, error: 'Internal server error' });
     }
+});
+
+// Delete a booking (admin cancelling)
+app.get('/api/bookings/:id', async (req, res) => {
+
+    try {
+        const { id } = req.params;
+
+        // Validate booking ID
+        if (!id || isNaN(id)) {
+            return res.status(400).json({
+                success: false,
+                error: 'Invalid booking ID'
+            });
+        }
+
+        // First, check if booking exists
+        const existingBookings = await executeQuery(
+            'SELECT * FROM bookings WHERE id = ?',
+            [id]
+        );
+
+        if (existingBookings.length === 0) {
+            return res.status(404).json({
+                success: false,
+                error: 'Booking not found'
+            });
+        }
+
+        const result = await executeQuery(
+            'DELETE FROM bookings WHERE id = ?',
+            [id]
+        );
+
+        res.json({
+            success: true,
+            message: 'Booking deleted successfully',
+            deletedId: id,
+            affectedRows: result.affectedRows
+        });
+
+    } catch (error) {
+        console.error('Error deleting booking:', error);
+        res.status(500).json({ success: false, error: 'Internal server error' });
+    }
+
 });
 
 // Health check endpoint
 app.get('/api/health', async (req, res) => {
     try {
         const result = await executeQuery('SELECT 1 as test');
-        res.json({ 
-            status: 'OK', 
+        res.json({
+            status: 'OK',
             database: 'Connected',
             table: 'bookings',
             timestamp: new Date().toISOString()
         });
     } catch (error) {
-        res.status(500).json({ 
-            status: 'Error', 
+        res.status(500).json({
+            status: 'Error',
             database: 'Disconnected',
-            error: error.message 
+            error: error.message
         });
     }
 });
@@ -208,7 +284,7 @@ app.get('/api/db-info', async (req, res) => {
     try {
         const tables = await executeQuery('SHOW TABLES');
         const columns = await executeQuery('DESCRIBE bookings');
-        
+
         res.json({
             database: dbConfig.database,
             tables: tables.map(t => Object.values(t)[0]),
