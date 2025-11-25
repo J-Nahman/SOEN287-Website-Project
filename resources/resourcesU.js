@@ -1,4 +1,29 @@
+// // Test connection on page load
+// async function testConnection() {
+//     try {
+//         console.log('🔍 Testing backend connection...');
+//         const response = await fetch(`${API_BASE_URL}/health`);
+//         if (response.ok) {
+//             const data = await response.json();
+//             console.log('✅ Backend connection successful:', data);
+//             return true;
+//         } else {
+//             console.error('❌ Backend connection failed:', response.status);
+//             return false;
+//         }
+//     } catch (error) {
+//         console.error('❌ Backend connection error:', error);
+//         alert('Cannot connect to booking server. Please ensure the backend is running on port 3001.');
+//         return false;
+//     }
+// }
+
+    const API_BASE_URL = 'http://localhost:3001/api';
+
+
 document.addEventListener('DOMContentLoaded', function () {
+        // testConnection();
+
     // Calendar functionality
     const calendarGrid = document.querySelector('.calendar-grid');
     const prevMonthBtn = document.getElementById('prev-month');
@@ -9,8 +34,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const bookButton = document.getElementById('book-button');
 
     let currentDate = new Date();
-    let selectedDate = null;
+    let selectedDate = new Date().toISOString().split('T')[0];
     let selectedTime = null;
+    let currentUserId = 1;
+    let currentResourceId = 1;
+
+
 
     // Generates calendar for the current month
     function generateCalendar(date) {
@@ -63,6 +92,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Update selected date
                 selectedDate = new Date(year, month, i);
+                
+                const formattedDate = selectedDate.toISOString().split('T')[0]; // creates dateString
+                console.log('📅 Date selected - formatted:', formattedDate);
+
                 summaryDate.textContent = selectedDate.toLocaleDateString('en-US', {
                     weekday: 'long',
                     year: 'numeric',
@@ -71,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
                 // Generate time slots for selected date
-                generateTimeSlots();
+                generateTimeSlots(formattedDate);
 
                 // Reset selected time
                 selectedTime = null;
@@ -83,40 +116,102 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Generate time slots
-    function generateTimeSlots() {
+    async function generateTimeSlots(dateString) {
         // Clear previous time slots
-        slotsContainer.innerHTML = '';
+        slotsContainer.innerHTML = '<div class="loading">Loading available slots...</div>';
 
-        // Generate time slots from 9 AM to 5 PM
-        for (let hour = 9; hour <= 17; hour++) {
-            for (let minute = 0; minute < 60; minute += 30) {
-                const timeSlot = document.createElement('div');
-                const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        try {
+            const response = await fetch(
+                `${API_BASE_URL}/available-slots?date=${dateString}&resourceId=${currentResourceId}`
+            );
 
-                // Randomly mark some slots as booked for demonstration
-                const isBooked = Math.random() < 0.2;
+            if (!response.ok) throw new Error('failed to fetch available slots');
 
-                timeSlot.className = isBooked ? 'time-slot booked' : 'time-slot';
-                timeSlot.textContent = `${hour > 12 ? hour - 12 : hour}:${minute.toString().padStart(2, '0')} ${hour >= 12 ? 'PM' : 'AM'}`;
+            const data = await response.json();
+            const bookedTimeSlots = data.bookedTimeSlots;
+            slotsContainer.innerHTML = '';
 
-                if (!isBooked) {
-                    timeSlot.addEventListener('click', function () {
-                        // Remove selected class from all time slots
-                        document.querySelectorAll('.time-slot').forEach(slot => {
-                            slot.classList.remove('selected');
+            // Generate time slots from 9 AM to 5 PM
+            for (let hour = 9; hour <= 17; hour++) {
+                for (let minute = 0; minute < 60; minute += 30) {
+                    const timeSlot = document.createElement('div');
+                    const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00`;
+
+                    // Read booked slots taken from database
+                    const isBooked = bookedTimeSlots.includes(timeString);
+
+                    timeSlot.className = isBooked ? 'time-slot booked' : 'time-slot';
+                    timeSlot.textContent = `${hour > 12 ? hour - 12 : hour}:${minute.toString().padStart(2, '0')} ${hour >= 12 ? 'PM' : 'AM'}`;
+
+                    if (!isBooked) {
+                        timeSlot.addEventListener('click', function () {
+                            // Remove selected class from all time slots
+                            document.querySelectorAll('.time-slot').forEach(slot => {
+                                slot.classList.remove('selected');
+                            });
+
+                            // Add selected class to clicked time slot
+                            timeSlot.classList.add('selected');
+
+                            // Update selected time
+                            selectedTime = timeString;
+                            summaryTime.textContent = timeSlot.textContent;
                         });
+                    }
 
-                        // Add selected class to clicked time slot
-                        timeSlot.classList.add('selected');
-
-                        // Update selected time
-                        selectedTime = timeString;
-                        summaryTime.textContent = timeSlot.textContent;
-                    });
+                    slotsContainer.appendChild(timeSlot);
                 }
-
-                slotsContainer.appendChild(timeSlot);
             }
+
+            if (slotsContainer.children.length === 0) {
+                slotsContainer.innerHTML = '<div class="no-slots">No available time slots for this date</div>';
+            }
+        } catch(error) {
+            console.error('Error generating time slots:', error);
+            slotsContainer.innerHTML = '<div class="error">Error loading time slots. Please try again.</div>';
+        }
+    }
+
+    async function bookSlot() {
+        if (!selectedDate || !selectedTime) {
+            alert('Please select both a date and time for your booking.');
+            return;
+        }
+        
+        const bookingData = {
+            userId: currentUserId,
+            resourceId: currentResourceId,
+            date: selectedDate.toISOString().split('T')[0],
+            time_slot: selectedTime
+        };
+
+        console.log('sending booking data: ', bookingData);
+        try {
+            bookButton.disabled = true;
+            bookButton.textContent = 'Booking...';
+
+            const response = await fetch(`${API_BASE_URL}/bookings`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json'},
+                body: JSON.stringify(bookingData)
+            });
+            
+            const result = await response.json();
+
+            if (!response.ok) throw new Error(result.error || 'Failed to create booking');
+
+            alert(`✅ Booking confirmed for ${summaryDate.textContent} at ${summaryTime.textContent}`);
+
+            const formattedDate = selectedDate.toISOString().split('T')[0];
+            generateTimeSlots(formattedDate);
+            
+        } catch (error) {
+            console.error('Booking error:', error);
+            alert(`❌ Booking failed: ${error.message}`);
+
+        } finally {
+            bookButton.disabled = false;
+            bookButton.textContent = 'Book Now';
         }
     }
 
@@ -133,15 +228,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Book button event listener
     bookButton.addEventListener('click', function () {
-        if (!selectedDate || !selectedTime) {
-            alert('Please select both a date and time for your booking.');
-            return;
-        }
-        //this alert will be sent to backend when backend is implemented
-        alert(`Booking confirmed for ${summaryDate.textContent} at ${summaryTime.textContent}`);
+        bookSlot();
     });
 
     // Initialize calendar and time slots
     generateCalendar(currentDate);
-    generateTimeSlots();
+    generateTimeSlots(selectedDate);
 });
