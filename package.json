@@ -5,7 +5,7 @@
   "main": "resources/booking-api.js",
   "scripts": {
     "start": "node resources/booking-api.js",
-    "init-db": "node resources/booking-api.js",
+    "init-db": "node databaseLaunch/launchDB.js",
     "docker-start": "node databaseLaunch/sqldocker.js",
     "docker-stop": "node -e \"require('./databaseLaunch/sqldocker.js').stopMySQLContainer()\""
   },
