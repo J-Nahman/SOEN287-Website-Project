@@ -1,0 +1,123 @@
+.hidden{
+    display: none;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color:#f0f0f0 ;
+}
+
+.page{
+    min-height: 100vh;
+}
+
+
+.logo{
+    width: 150px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.logo-small{
+    width: 100px;
+    height: auto;
+    display: block;
+    margin:0 auto 20px auto;
+}
+
+
+.header{
+    max-width: 800px;
+    margin: 50px auto 0px auto;
+    padding: 20px 20px 10px 20px;
+    text-align: center;
+    background-color: #912338;
+}
+
+.header h1{
+    margin-bottom: 0px;
+}
+
+.TypeOfUser{
+    max-width: 800px;
+    margin: 10px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.TypeOfUser h2 {
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+.userType{
+    display: inline-block;
+    width: 280px;
+    margin: 20px;
+    padding: 30px;
+    border: 2px solid #ddd;
+    background-color: #912338;
+    cursor: pointer;
+    vertical-align: top;
+    color:white
+}
+
+.userType:hover{
+    border-color:#912338 ;
+}
+
+.userType button{
+    margin-top: 15px;
+    padding: 10px 30px;
+    background-color: #f0f0f0;
+    color: black;
+    border: none;
+    cursor: pointer;
+}
+
+.loginContainer{
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 40px;
+    background-color: white;
+    border: 1px solid #ddd;
+}
+
+.loginContainer h1{
+    text-align: center;
+    color:black;
+}
+
+.loginContainer p{
+    text-align: center;
+}
+
+.loginContainer input{
+     width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+.loginContainer button{
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background-color: black;
+    color: #f0f0f0;
+    border: none;
+    cursor: pointer;
+}
+
+.loginContainer hover{
+    background-color: black;
+}
+
+#errorMessage {
+    color: #912338;
+    margin-top: 10px;
+}
+

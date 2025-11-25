@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Reservation Panel</title>
+    <link rel="stylesheet" href="resourcesA.css"/>
+</head>
+<body>
+    <nav>
+        <div class="row">
+            <div class="logo">
+                <a href="/index.html">Concordia Reserves</a>
+            </div>
+            <div class="account">
+                <a href="/overviewA.html">Overview</a>
+            </div>
+            <div class="account">
+                <a href="/overviewA.html#activeBookings">Active Bookings</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <h1 class="page-title">Manage Bookings</h1>
+        
+        <div class="admin-controls">
+            <button id="block-slot">Block Time Slot</button>
+            <button id="unblock-slot">Unblock Time Slot</button>
+        </div>
+        
+        <div class="calendar-container">
+            <div class="calendar">
+                <div class="calendar-header">
+                    <h2>October 2023</h2>
+                    <div class="calendar-nav">
+                        <button id="prev-month">&lt;</button>
+                        <button id="next-month">&gt;</button>
+                    </div>
+                </div>
+                <div class="calendar-grid">
+                    <div class="calendar-day">Sun</div>
+                    <div class="calendar-day">Mon</div>
+                    <div class="calendar-day">Tue</div>
+                    <div class="calendar-day">Wed</div>
+                    <div class="calendar-day">Thu</div>
+                    <div class="calendar-day">Fri</div>
+                    <div class="calendar-day">Sat</div>
+                    <!-- Calendar dates populated by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="time-slots">
+                <h2>Time Slots Management</h2>
+                <div class="slots-container">
+                    <!-- Time slots populated by JavaScript -->
+                </div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #ccffcc;"></div>
+                        <span>Available</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #ffcccc;"></div>
+                        <span>Booked</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #cccccc;"></div>
+                        <span>Blocked</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="booked-slots">
+            <h2>Bookings for Selected Date</h2>
+            <div class="bookings-list" id="bookings-list">
+                <!-- Bookings populated by JavaScript -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Popup Confirmation that is modified by javascript -->
+    <div class="modal" id="confirmation-modal">
+        <div class="modal-content">
+            <h3 id="modal-title">Confirm Action</h3>
+            <p id="modal-message">Are you sure you want to proceed?</p>
+            <div class="modal-buttons">
+                <button class="confirm" id="modal-confirm">Confirm</button>
+                <button class="cancel" id="modal-cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="#">Go to top</a>
+    </footer>
+
+    <script src="resourcesA.js"></script>
+</body>
+</html>

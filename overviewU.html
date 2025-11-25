@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Overview</title>
+    <link rel="stylesheet" href="styleo.css">
+</head>
+
+<body>
+
+
+    <nav>
+        <div class="row">
+            <div class="logo">
+                <a href="index.html">Concordia Reserves</a>
+            </div>
+            <div class="account">
+                <a href="#mybooking">My Bookings</a>
+            </div>
+        </div>
+    </nav>
+    <div class="row">
+        <div class="title">
+            <h2>View Available Resources</h2>
+        </div>
+
+
+
+
+
+
+
+       <div id="resources-container"></div>
+
+<script>
+async function loadResources() {
+    const res = await fetch('/api/resources');
+    const data = await res.json();
+
+    const container = document.getElementById('resources-container');
+
+    // Group by type
+    const types = ['room', 'lab', 'equipment'];
+    types.forEach(type => {
+        const section = document.createElement('div');
+        section.className = type + 'container';
+
+        const subtitle = document.createElement('h2');
+        subtitle.textContent = type.charAt(0).toUpperCase() + type.slice(1) + 's:';
+        section.appendChild(subtitle);
+
+        data.filter(r => r.type === type).forEach(item => {
+            const div = document.createElement('div');
+            div.className = type;
+
+            div.innerHTML = `
+                <div class="${type}image"><img src="${item.image_url}" alt="${item.name}"></div>
+                <div class="${type}text">
+                    <div class="${type}name"><h3>${item.name}</h3></div>
+                    <div class="${type}book"><a href="resources/resourceU.html?resourceId=${item.id}">Book Now</a></div>
+                </div>
+            `;
+            section.appendChild(div);
+        });
+
+        container.appendChild(section);
+    });
+}
+
+loadResources();
+</script>
+
+
+
+
+
+
+
+
+
+
+        <footer>
+            <a href="#">Go to top</a>
+        </footer> 
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Campus Resource Booking & Management System</title>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+    <div id="FirstPage" class="page">
+        <div class="header">
+            <img src="/assets/logo.png" alt="unilogo" class="logo">
+            <h1>Campus Resource Booking & Management System</h1>
+        </div>
+    
+   
+
+    <div id="LoginPage" class="page">
+        <div class="loginContainer">
+            <h1 id="loginTitle">Login</h1>
+            <p id="loginSubtitle"></p>
+
+<form id="loginForm" action="/login" method="POST">
+    <input type="email" name="username" id="email" placeholder="Email" required/>
+    <input type="password" name="password" id="password" placeholder="Password" required/>
+    <button type="submit">Login</button>
+</form>
+
+     <p id="errorMessage" style="color:red; display:none;">
+  Invalid username or password.
+</p>
+            <p><a href="#" onclick="showLanding(); return false;">Back to home</a></p>
+        </div>
+    </div>
+    </div>
+
+<script>
+  // Show error if ?error=1 is in the URL
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('error') === '1') {
+    document.getElementById('errorMessage').style.display = 'block';
+  }
+</script>
+</body>
+</html>
