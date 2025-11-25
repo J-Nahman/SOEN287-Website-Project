@@ -1,7 +1,6 @@
 
 
 document.addEventListener('DOMContentLoaded', function () {
-
     // Calendar functionality
     const calendarGrid = document.querySelector('.calendar-grid');
     const prevMonthBtn = document.getElementById('prev-month');
