@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
             //FILTER ALL BOOKINGS BY RESOURCE ID
 
             const filteredBookings = bookings.filter(booking =>
-                booking.resource_id = currentResourceId
+                booking.resource_id === currentResourceId
             );
 
             //Take fetched data and convert it for frontend
