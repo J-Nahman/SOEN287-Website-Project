@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const API_BASE_URL = 'http://localhost:3000/api';
+
     // Calendar functionality
     const calendarGrid = document.querySelector('.calendar-grid');
     const prevMonthBtn = document.getElementById('prev-month');
@@ -17,8 +17,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     let currentResourceId = parseInt(urlParams.get('resourceId')) || 1;
     
-    console.log('🔗 Resource ID from URL:', currentResourceId);
-
+    console.log('Resource ID from URL:', currentResourceId);
+    
+    const API_BASE_URL = 'http://localhost:3000/api';
 
     // Generates calendar for the current month
     function generateCalendar(date) {
