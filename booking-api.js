@@ -7,7 +7,7 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors({
@@ -31,8 +31,8 @@ app.use(session({
 const dbConfig = {
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || 'password',
-    database: process.env.DB_NAME || 'booking_system',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'login',
     port: process.env.DB_PORT || 3306,
     multipleStatements: false
 };

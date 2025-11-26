@@ -103,6 +103,35 @@ app.get('/api/resources', async (req, res) => {
     }
 });
 
+// AUTH API IMPLEMENTATION
+require('dotenv').config();
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+
+// Middleware
+app.use(cors({
+    origin: 'http://127.0.0.1:5500',
+    credentials: true
+}));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(session({
+    secret: 'concordia-booking-secret-2024',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: false,
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000
+    }
+}));
+
+// Import and setup authentication routes
+const authModule = require('./auth-api');
+authModule.setPool(pool);
+app.use('/api/auth', authModule.router);
+
+
 // everything past this is the booking system api's
 
 
