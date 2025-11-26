@@ -64,21 +64,21 @@ document.addEventListener('DOMContentLoaded', function () {
             //Take fetched data and convert it for frontend
             const reformatedBookings = {};
 
-            bookings.forEach(booking => {
-                const date = booking.date.split('T')[0];
-                const time = booking.time_slot;
+            filteredBookings.forEach(filteredBookings => {
+                const date = filteredBookings.date.split('T')[0];
+                const time = filteredBookings.time_slot;
                 if (!reformatedBookings[date]) {
                     reformatedBookings[date] = {};
                 }
 
                 // Check if this is an admin block (user_id = 99999)
-                const isBlock = booking.user_id === 99999;
+                const isBlock = filteredBookings.user_id === 99999;
 
                 reformatedBookings[date][time] = {
-                    user: isBlock ? 'Admin (Blocked)' : `User ${booking.user_id}`,
+                    user: isBlock ? 'Admin (Blocked)' : `User ${filteredBookings.user_id}`,
                     type: isBlock ? "blocked" : "booked",
-                    bookingId: booking.id,
-                    resourceId: booking.resource_id
+                    bookingId: filteredBookings.id,
+                    resourceId: filteredBookings.resource_id
                 };
             });
 
