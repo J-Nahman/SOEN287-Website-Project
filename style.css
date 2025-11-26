@@ -6,7 +6,7 @@ body{
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color:#912338 ;
+    background-color:#f0f0f0 ;
 }
 
 .page{
@@ -33,6 +33,7 @@ body{
     margin: 50px auto 0px auto;
     padding: 20px 20px 10px 20px;
     text-align: center;
+    background-color: #912338;
 }
 
 .header h1{
@@ -57,9 +58,10 @@ body{
     margin: 20px;
     padding: 30px;
     border: 2px solid #ddd;
-    background-color: white;
+    background-color: #912338;
     cursor: pointer;
     vertical-align: top;
+    color:white
 }
 
 .userType:hover{
@@ -77,9 +79,9 @@ body{
 
 .loginContainer{
     max-width: 400px;
-    margin: 100px auto;
+    margin: 40px auto;
     padding: 40px;
-    background-color: #f0f0f0;
+    background-color: white;
     border: 1px solid #ddd;
 }
 

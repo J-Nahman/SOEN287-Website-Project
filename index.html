@@ -7,47 +7,39 @@
 </head>
 <body>
 
-    <!--PAGE 1-->
     <div id="FirstPage" class="page">
         <div class="header">
-            <img src="logo.png" alt="unilogo" class="logo">
+            <img src="/assets/logo.png" alt="unilogo" class="logo">
             <h1>Campus Resource Booking & Management System</h1>
         </div>
     
-    <div class="TypeOfUser">
-        <h2>Please select if you'd like to sign up as Student/Faculty or Admin</h2>
-       
-        <div class="userType" onclick="showLogin('user')">
-            <h3>Student/Faculty</h3>
-            <p>Book rooms, labs, and equipenements</p>
-            <button type="button">Enter</button>
-        </div>
-        
-        <div class="userType" onclick="showLogin('admin')">
-            <h3>Admin</h3>
-            <p>Manage ressources and bookings</p>
-            <button type="button">Enter</button>
-        </div>
-    </div>
-</div>
+   
 
-    <!--PAGE 2-->
-    <div id="LoginPage" class="page hidden">
+    <div id="LoginPage" class="page">
         <div class="loginContainer">
             <h1 id="loginTitle">Login</h1>
             <p id="loginSubtitle"></p>
 
-            <form id="loginForm">
-                <input type="email" id="email" placeholder="Email"/>
-                <input type="password" id="password" placeholder="Password" />
-                <button type="submit">Login</button>
-            </form>
+<form id="loginForm" action="/login" method="POST">
+    <input type="email" name="username" id="email" placeholder="Email" required/>
+    <input type="password" name="password" id="password" placeholder="Password" required/>
+    <button type="submit">Login</button>
+</form>
 
-            <p id="errorMessage" class="hidden">The email or the password is invalid.</p>
+     <p id="errorMessage" style="color:red; display:none;">
+  Invalid username or password.
+</p>
             <p><a href="#" onclick="showLanding(); return false;">Back to home</a></p>
         </div>
     </div>
+    </div>
 
-    <script src="script.js"></script>
+<script>
+  // Show error if ?error=1 is in the URL
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('error') === '1') {
+    document.getElementById('errorMessage').style.display = 'block';
+  }
+</script>
 </body>
 </html>

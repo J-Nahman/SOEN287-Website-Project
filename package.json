@@ -2,12 +2,12 @@
  "name": "booking-system-mysql",
  "version": "1.0.0",
  "description": "MySQL database for booking system",
- "main": "resources/booking-api.js",
+ "main": "server.js",
  "scripts": {
-  "start": "node resources/booking-api.js",
-  "init-db": "node databaseLaunch/launchDB.js",
-  "docker-start": "node databaseLaunch/sqldocker.js",
-  "docker-stop": "node -e \"require('./databaseLaunch/sqldocker.js').stopMySQLContainer()\""
+  "start": "node server.js",
+  "init-db": "node launchDB.js",
+  "docker-start": "node sqldocker.js",
+  "docker-stop": "node -e \"require('.sqldocker.js').stopMySQLContainer()\""
  },
  "dependencies": {
   "body-parser": "^2.2.1",
@@ -16,7 +16,7 @@
   "express": "^5.1.0",
   "mysql": "^2.18.1"
  },
- "devDependencies": {
+  "devDependencies": {
   "nodemon": "^3.0.1"
  }
 }

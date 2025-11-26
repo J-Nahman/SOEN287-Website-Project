@@ -18,9 +18,13 @@ document.addEventListener('DOMContentLoaded', function () {
     let selectedDate = new Date();
     let selectedTimeSlot = null;
     let currentUserId = 1;
-    let currentResourceId = 1;
 
-    const API_BASE_URL = 'http://localhost:3001/api';
+    const urlParams = new URLSearchParams(window.location.search);
+    let currentResourceId = parseInt(urlParams.get('resourceId')) || 1;
+    
+    console.log('Resource ID from URL:', currentResourceId);
+
+    const API_BASE_URL = 'http://localhost:3000/api';
 
     // Initialize by fetching current bookings
     let bookingsData = {};

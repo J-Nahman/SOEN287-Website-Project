@@ -27,213 +27,59 @@
         </div>
 
 
-        <div class="subtitle">
-            <h2>Rooms:</h2>
-        </div>
 
 
 
 
 
-        <div class="roomcontainer">
+       <div id="resources-container"></div>
 
+<script>
+async function loadResources() {
+    const res = await fetch('/api/resources');
+    const data = await res.json();
 
+    const container = document.getElementById('resources-container');
 
-            <div class="room">
-                <div class="roomimage">
-                    <img src="assets/download.jpeg" alt="">
+    // Group by type
+    const types = ['room', 'lab', 'equipment'];
+    types.forEach(type => {
+        const section = document.createElement('div');
+        section.className = type + 'container';
+
+        const subtitle = document.createElement('h2');
+        subtitle.textContent = type.charAt(0).toUpperCase() + type.slice(1) + 's:';
+        section.appendChild(subtitle);
+
+        data.filter(r => r.type === type).forEach(item => {
+            const div = document.createElement('div');
+            div.className = type;
+
+            div.innerHTML = `
+                <div class="${type}image"><img src="${item.image_url}" alt="${item.name}"></div>
+                <div class="${type}text">
+                    <div class="${type}name"><h3>${item.name}</h3></div>
+                    <div class="${type}book"><a href="resources/resourceU.html?resourceId=${item.id}">Book Now</a></div>
                 </div>
-                <div class="roomtext">
-                    <div class="roomname">
-                        <h3>Room 1</h3>
-                    </div>
-                    <div class="roombook">
-                        <a href="resources/resourceU.html">Book Now</a>
-                    </div>
-                </div>
-            </div>
-            <div class="room">
-                <div class="roomimage">
-                    <img src="assets/download (1).jpeg" alt="">
-                </div>
-                <div class="roomtext">
-                    <div class="roomname">
-                        <h3>Room 2</h3>
-                    </div>
-                    <div class="roombook">
-                        <a href="resources/resourceU.html">Book Now</a>
-                    </div>
-                </div>
-            </div>
-            <div class="room">
-                <div class="roomimage">
-                    <img src="assets/download (2).jpeg" alt="">
-                </div>
-                <div class="roomtext">
-                    <div class="roomname">
-                        <h3>Room 3</h3>
-                    </div>
-                    <div class="roombook">
-                        <a href="resources/resourceU.html">Book Now</a>
-                    </div>
-                </div>
-            </div>
+            `;
+            section.appendChild(div);
+        });
 
+        container.appendChild(section);
+    });
+}
 
-
-
-
-        </div>
-
-
-        <div class="subtitle">
-            <h2>Labs:</h2>
-        </div>
-        <div class="labcontainer">
-
-            <div class="lab">
-                <div class="labimage">
-                    <img src="assets/download (3).jpeg" alt="">
-                </div>
-                <div class="labtext">
-                    <div class="labname">
-                        <h3>Lab 1</h3>
-                    </div>
-                    <div class="labbook">
-                        <a href="resources/resourceU.html">Book Now</a>
-                    </div>
-                </div>
-            </div>
-            <div class="lab">
-                <div class="labimage">
-                    <img src="assets/download (4).jpeg" alt="">
-                </div>
-                <div class="labtext">
-                    <div class="labname">
-                        <h3>Lab 2</h3>
-                    </div>
-                    <div class="labbook">
-                        <a href="resources/resourceU.html">Book Now</a>
-                    </div>
-                </div>
-            </div>
-            <div class="lab">
-                <div class="labimage">
-                    <img src="assets/download (5).jpeg" alt="">
-                </div>
-                <div class="labtext">
-                    <div class="labname">
-                        <h3>Lab 3</h3>
-                    </div>
-                    <div class="labbook">
-                        <a href="resources/resourceU.html">Book Now</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+loadResources();
+</script>
 
 
 
 
 
 
-        <div class="subtitle">
-            <h2>Equipment:</h2>
-        </div>
-        <div class="equipcontainer">
-
-            <div class="equip">
-                <div class="equipimage">
-                    <img src="assets/download (6).jpeg" alt="">
-                </div>
-                <div class="equiptext">
-                    <div class="equipname">
-                        <h3>Laptop</h3>
-                    </div>
-                    <div class="equipbook">
-                        <a href="resources/resourceU.html">Book Now</a>
-                    </div>
-                </div>
-            </div>
-            <div class="equip">
-                <div class="equipimage">
-                    <img src="assets/download (7).jpeg" alt="">
-                </div>
-                <div class="equiptext">
-                    <div class="equipname">
-                        <h3>Camera</h3>
-                    </div>
-                    <div class="equipbook">
-                        <a href="resources/resourceU.html">Book Now</a>
-                    </div>
-                </div>
-            </div>
-            <div class="equip">
-                <div class="equipimage">
-                    <img src="assets/download (8).jpeg" alt="">
-                </div>
-                <div class="equiptext">
-                    <div class="equipname">
-                        <h3>Board</h3>
-                    </div>
-                    <div class="equipbook">
-                        <a href="resources/resourceU.html">Book Now</a>
-                    </div>
-                </div>
-            </div>
 
 
-        </div>
 
-        <hr>
-
-        <div id="mybooking" class="subtitle">
-            <h2>My Current Reservations:</h2>
-        </div>
-        <div class="equipcontainer">
-
-            <div class="room">
-                <div class="roomimage">
-                    <img src="assets/download.jpeg" alt="">
-                </div>
-                <div class="roomtext">
-                    <div class="roomname">
-                        <h3>Room 1</h3>
-                    </div>
-                    <div class="roombook">
-                        <a href="resources/resourceU.html">Book Now</a>
-                    </div>
-                </div>
-            </div>
-            <div class="lab">
-                <div class="labimage">
-                    <img src="assets/download (4).jpeg" alt="">
-                </div>
-                <div class="labtext">
-                    <div class="labname">
-                        <h3>Lab 2</h3>
-                    </div>
-                    <div class="labbook">
-                        <a href="resources/resourceU.html">Book Now</a>
-                    </div>
-                </div>
-            </div>
-            <div class="equip">
-                <div class="equipimage">
-                    <img src="assets/download (8).jpeg" alt="">
-                </div>
-                <div class="equiptext">
-                    <div class="equipname">
-                        <h3>Board</h3>
-                    </div>
-                    <div class="equipbook">
-                        <a href="resources/resourceU.html">Book Now</a>
-                    </div>
-                </div>
-            </div>
-
-
-        </div>
 
         <footer>
             <a href="#">Go to top</a>

@@ -1,6 +1,5 @@
-
-
 document.addEventListener('DOMContentLoaded', function () {
+
     // Calendar functionality
     const calendarGrid = document.querySelector('.calendar-grid');
     const prevMonthBtn = document.getElementById('prev-month');
@@ -14,9 +13,13 @@ document.addEventListener('DOMContentLoaded', function () {
     let selectedDate = new Date().toISOString().split('T')[0];
     let selectedTime = null;
     let currentUserId = 1;
-    let currentResourceId = 1;
 
-    const API_BASE_URL = 'http://localhost:3001/api';
+    const urlParams = new URLSearchParams(window.location.search);
+    let currentResourceId = parseInt(urlParams.get('resourceId')) || 1;
+    
+    console.log('Resource ID from URL:', currentResourceId);
+    
+    const API_BASE_URL = 'http://localhost:3000/api';
 
     // Generates calendar for the current month
     function generateCalendar(date) {
@@ -177,14 +180,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (!response.ok) throw new Error(result.error || 'Failed to create booking');
 
-            alert(`Booking confirmed for ${summaryDate.textContent} at ${summaryTime.textContent}`);
+            alert(`✅ Booking confirmed for ${summaryDate.textContent} at ${summaryTime.textContent}`);
 
             const formattedDate = selectedDate.toISOString().split('T')[0];
             generateTimeSlots(formattedDate);
             
         } catch (error) {
             console.error('Booking error:', error);
-            alert(`Booking failed: ${error.message}`);
+            alert(`❌ Booking failed: ${error.message}`);
 
         } finally {
             bookButton.disabled = false;
